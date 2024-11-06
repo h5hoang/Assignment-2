@@ -7,7 +7,7 @@ def main():
 
     # load data with default settings
     # You will need to pick the features you want to use! 
-    X_train, X_val, y_train, y_val = utils.loadDataset(features=['gender']
+    X_train, X_val, y_train, y_val = utils.loadDataset(features=['GENDER']
                                                        , split_percent=0.8, split_state=42)
 
     # scale data since values vary across features
@@ -27,6 +27,11 @@ def main():
     log_model.plot_loss_history()
             
     """
+
+    log_model = logreg.LogisticRegression(num_feats=X_train.shape[1], max_iter=10, tol=0.01, learning_rate=0.00001, batch_size=12)
+    log_model.train_model(X_train, y_train, X_val, y_val)
+    log_model.plot_loss_history()
+
 
 if __name__ == "__main__":
     main()

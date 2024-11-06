@@ -152,8 +152,18 @@ class LogisticRegression(BaseRegressor):
         """
         
         
-        pass
-    
+        # predicted probs for the curr weights
+        y_pred = self.make_prediction(X)
+        
+        # num of samples
+        m = len(y)
+        error = y_pred - y
+
+        # avg of the outer product of X and error 
+        gradient = (1 / m) * X.T.dot(error)
+        
+        return gradient
+
     def loss_function(self, X, y) -> float:
         """
         TODO: Get y_pred from input X and implement binary cross 
@@ -168,7 +178,16 @@ class LogisticRegression(BaseRegressor):
         Returns: 
             average loss 
         """
-        pass
+        # predicted probs for the curr weights
+        y_pred = self.make_prediction(X)
+
+        # clipping preds to make sure theyre within episilon to 1-epsilon so that they're never 0 or 1 to avoid log issues
+        epsilon = 1e-8
+        y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
+
+        # bce formula for loss function
+        bce_loss = -np.mean(y.dot(np.log(y_pred)) + (1 - y).dot(np.log(1 - y_pred)))
+        return bce_loss
     
     def make_prediction(self, X) -> np.array:
         """
@@ -183,8 +202,17 @@ class LogisticRegression(BaseRegressor):
             y_pred for given X
         """
 
-        pass
+        # checks if bias term is in feature values array and if it ismissing then it'll add it
+        if X.shape[1] == self.num_feats:
+            X = np.hstack([X, np.ones((X.shape[0], 1))])
+            
+        # linear combination of inputs and weights
+        lc = X.dot(self.W)
 
+        # clip lin combination values to prevent overflow in sigmoid function
+        lc = np.clip(lc, -1000, 1000)
 
+        # sigmoid function to get probabilities
+        y_pred = 1.0 / (1 + np.exp(-lc))
 
-    
+        return y_pred
