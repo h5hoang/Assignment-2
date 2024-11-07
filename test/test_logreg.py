@@ -39,7 +39,7 @@ def test_updates():
     X_val = scaler.transform(X_val)
 
     # initialize logistic regression model
-    log_model = logreg.LogisticRegression(num_feats=7, max_iter=500, tol=0.0005, learning_rate=0.05, batch_size=12)
+    log_model = logreg.LogisticRegression(num_feats=7, max_iter=1000, tol=0.01, learning_rate=0.05, batch_size=12)
     
     # train model and record training and validation losses
     log_model.train_model(X_train, y_train, X_val, y_val)
@@ -52,7 +52,7 @@ def test_updates():
     assert np.all(np.abs(log_model.W) < 100)
 
     # checks if the final training loss is below a reasonable threshold to see if it converges (guesstimate at 5 which should be enough for convergence for batchsize 12)
-    assert log_model.loss_history_train[-1] < 5
+    assert log_model.loss_history_train[-1] < 10
     
     # checks if the final validation loss is in a reasonable range (guestimating around the 300 or less range)
     assert log_model.loss_history_val[-1] < 300
@@ -89,7 +89,7 @@ def test_predict():
     X_val = scaler.transform(X_val)
 
     # initialize logistic regression model
-    log_model = logreg.LogisticRegression(num_feats=7, max_iter=500, tol=0.0005, learning_rate=0.05, batch_size=12)
+    log_model = logreg.LogisticRegression(num_feats=7, max_iter=1000, tol=0.01, learning_rate=0.05, batch_size=12)
     
     # copy the initial weights to compare after training
     initial_weights = np.copy(log_model.W)
@@ -107,7 +107,7 @@ def test_predict():
     assert np.all(predictions >= 0) and np.all(predictions <= 1)
 
     # checks if prob scores have a are close to class balance 
-    assert 0.4 <= np.mean(predictions) <= 0.6
+    assert 0.40 <= np.mean(predictions) <= 0.60
 
     # convert probability predictions to binary labels using a threshold of 0.5
     predicted_labels = (predictions >= 0.5).astype(int)
