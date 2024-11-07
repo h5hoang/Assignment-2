@@ -44,22 +44,22 @@ def test_updates():
     # train model and record training and validation losses
     log_model.train_model(X_train, y_train, X_val, y_val)
     
-    # checks if length of loss history is not 0
+    # checks if len of loss history is not 0
     assert len(log_model.loss_history_train) !=0
     assert len(log_model.loss_history_val) != 0
 
     # checks if weights are in a reasonable range 
     assert np.all(np.abs(log_model.W) < 100)
 
-    # checks if loss values decrease over time bc that means that the model is learning 
-    assert log_model.loss_history_train[0] > log_model.loss_history_train[-1] #checks training loss
-    assert log_model.loss_history_val[0] > log_model.loss_history_val[-1] # checks validation loss
-
-    # checks if the final training loss is below a reasonable threshold to see if it converges (guesstimate at 5 which should be enough for convergence)
+    # checks if the final training loss is below a reasonable threshold to see if it converges (guesstimate at 5 which should be enough for convergence for batchsize 12)
     assert log_model.loss_history_train[-1] < 5
     
     # checks if the final validation loss is in a reasonable range (guestimating around the 300 or less range)
     assert log_model.loss_history_val[-1] < 300
+
+    # checks if loss values decrease over time bc that means that the model is learning 
+    assert log_model.loss_history_train[0] > log_model.loss_history_train[-1] #checks training loss
+    assert log_model.loss_history_val[0] > log_model.loss_history_val[-1] # checks validation loss
     
 def test_predict():
 	# Check that self.W is being updated as expected 

@@ -28,7 +28,7 @@ def main():
             
     """
 
-    log_model = logreg.LogisticRegression(num_feats=X_train.shape[1], max_iter=10, tol=0.01, learning_rate=0.00001, batch_size=12)
+    log_model = logreg.LogisticRegression(num_feats=7, max_iter=500, tol=0.0005, learning_rate=0.05, batch_size=150)
     log_model.train_model(X_train, y_train, X_val, y_val)
     log_model.plot_loss_history()
 
